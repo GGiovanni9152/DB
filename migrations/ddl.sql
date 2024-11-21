@@ -34,10 +34,11 @@ COMMENT ON COLUMN developers.country IS 'Страна регистрации р�
 
 CREATE TABLE games(
     game_id SERIAL PRIMARY KEY,
-    release_date DATE,
+    name VARCHAR(255),
     developer_id INT REFERENCES developers(developer_id) ON DELETE CASCADE,
     rating FLOAT,
-    name VARCHAR(255),
+    price FLOAT,
+    release_date DATE,
     version VARCHAR(20),
     description VARCHAR(600)
 );
@@ -51,6 +52,8 @@ COMMENT ON COLUMN games.release_date IS 'Дата выхода';
 COMMENT ON COLUMN games.developer_id IS 'Идентификатор разработчика';
 
 COMMENT ON COLUMN games.rating IS 'Рейтинг игры';
+
+COMMENT ON COLUMN games.price IS 'Цена игры';
 
 COMMENT ON COLUMN games.name IS 'Название игры';
 
@@ -113,7 +116,7 @@ CREATE TABLE friendship(
     friendship_id SERIAL PRIMARY KEY,
     user_id1 INT REFERENCES users(user_id) ON DELETE CASCADE,
     user_id2 INT REFERENCES users(user_id) ON DELETE CASCADE,
-    status ENUM ('reauested', 'accepted')
+    status ENUM ('requested', 'accepted')
 )
 
 COMMENT ON TABLE friendship IS 'Таблица отношений между пользователями';
