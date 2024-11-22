@@ -37,28 +37,19 @@ VALUES
     );
 
 INSERT INTO
-    games(name, developer_id, price, release_date, version)
+    games(name, price)
 VALUES
     (
         'Dota2',
-        1,
-        0,
-        09.07.2013,
-        '7.37d'
+        0
     ),
     (
         'Smyta',
-        3,
-        50,
-        04.04.2024,
-        '1.3'
+        80
     ),
     (
         'SaintsRow4',
-        2,
-        30,
-        12.08.2015,
-        '1.5'
+        40
     );
 
 INSERT INTO
@@ -76,7 +67,8 @@ VALUES
     ),
     (
         3,
-        1
+        1,
+        4.5
     );
 
 INSERT INTO
@@ -99,17 +91,17 @@ VALUES
     (
         1,
         1,
-        03.05.2016
+        '2016-06-03'
     ),
     (
         2,
         1,
-        03.05.2016
+        '2016-05-03'
     ),
     (
         3,
         1,
-        10.08.2019
+        '2019-08-10'
     );
 
 INSERT INTO
@@ -128,7 +120,7 @@ VALUES
     (
         2,
         1,
-        'accepted',
+        'accepted'
     ),
     (
         3,

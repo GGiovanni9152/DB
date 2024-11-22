@@ -1,13 +1,15 @@
+CREATE TYPE friendship_status AS ENUM ('requested', 'accepted');
+
 CREATE TABLE users(
     user_id SERIAL PRIMARY KEY,
     nickname VARCHAR(255),
     email VARCHAR(255),
-    money: FLOAT
+    money FLOAT
 );
 
 COMMENT ON TABLE users IS 'Информация о пользователях';
 
-COMMENT ON TABLE users.user_id IS 'Уникальный идентификатор пользователя';
+COMMENT ON COLUMN users.user_id IS 'Уникальный идентификатор пользователя';
 
 COMMENT ON COLUMN users.nickname IS 'Имя пользователя';
 
@@ -35,31 +37,39 @@ COMMENT ON COLUMN developers.country IS 'Страна регистрации р�
 CREATE TABLE games(
     game_id SERIAL PRIMARY KEY,
     name VARCHAR(255),
-    developer_id INT REFERENCES developers(developer_id) ON DELETE CASCADE,
-    rating FLOAT,
-    price FLOAT,
-    release_date DATE,
-    version VARCHAR(20),
-    description VARCHAR(600)
+    price FLOAT
 );
 
 COMMENT ON TABLE games IS 'Таблица игр';
 
 COMMENT ON COLUMN games.game_id IS 'Уникальный идентификатор игры';
 
-COMMENT ON COLUMN games.release_date IS 'Дата выхода';
-
-COMMENT ON COLUMN games.developer_id IS 'Идентификатор разработчика';
-
-COMMENT ON COLUMN games.rating IS 'Рейтинг игры';
+COMMENT ON COLUMN games.name IS 'Название игры';
 
 COMMENT ON COLUMN games.price IS 'Цена игры';
 
-COMMENT ON COLUMN games.name IS 'Название игры';
+CREATE TABLE game_detail(
+    game_id INT REFERENCES games(game_id) ON DELETE CASCADE,
+    developer_id INT REFERENCES developers(developer_id) ON DELETE CASCADE,
+    rating FLOAT,
+    release_date DATE,
+    version VARCHAR(20),
+    description VARCHAR(600)
+);
 
-COMMENT ON COLUMN games.version IS 'Версия игры';
+COMMENT ON TABLE game_detail IS 'Таблица детального описания игр';
 
-COMMENT ON COLUMN games.description IS 'Описание игры';
+COMMENT ON COLUMN game_detail.game_id IS 'Идентификатор игры';
+
+COMMENT ON COLUMN game_detail.release_date IS 'Дата выхода';
+
+COMMENT ON COLUMN game_detail.developer_id IS 'Идентификатор разработчика';
+
+COMMENT ON COLUMN game_detail.rating IS 'Рейтинг игры';
+
+COMMENT ON COLUMN game_detail.version IS 'Версия игры';
+
+COMMENT ON COLUMN game_detail.description IS 'Описание игры';
 
 CREATE TABLE user_games(
     id SERIAL PRIMARY KEY,
@@ -83,7 +93,7 @@ CREATE TABLE achievements(
     game_id INT REFERENCES games(game_id) ON DELETE CASCADE,
     name VARCHAR(100),
     description VARCHAR(255)
-)
+);
 
 COMMENT ON TABLE achievements IS 'Таблица достижений';
 
@@ -100,7 +110,7 @@ CREATE TABLE user_achievement(
     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
     achievement_id INT REFERENCES achievements(achievement_id) ON DELETE CASCADE,
     receive_date DATE
-)
+);
 
 COMMENT ON TABLE user_achievement IS 'Таблица достижений пользователей';
 
@@ -116,8 +126,8 @@ CREATE TABLE friendship(
     friendship_id SERIAL PRIMARY KEY,
     user_id1 INT REFERENCES users(user_id) ON DELETE CASCADE,
     user_id2 INT REFERENCES users(user_id) ON DELETE CASCADE,
-    status ENUM ('requested', 'accepted')
-)
+    status friendship_status
+);
 
 COMMENT ON TABLE friendship IS 'Таблица отношений между пользователями';
 
