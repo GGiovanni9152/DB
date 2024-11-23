@@ -2,7 +2,7 @@ CREATE TYPE friendship_status AS ENUM ('requested', 'accepted');
 
 CREATE TABLE users(
     user_id SERIAL PRIMARY KEY,
-    nickname VARCHAR(255),
+    nickname VARCHAR(255) UNIQUE,
     email VARCHAR(255),
     money FLOAT
 );
@@ -19,7 +19,7 @@ COMMENT ON COLUMN users.money IS 'Количество денег на счет�
 
 CREATE TABLE developers(
     developer_id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
+    name VARCHAR(255) UNIQUE,
     website VARCHAR(255),
     country VARCHAR(50)
 );
@@ -36,7 +36,7 @@ COMMENT ON COLUMN developers.country IS 'Страна регистрации р�
 
 CREATE TABLE games(
     game_id SERIAL PRIMARY KEY,
-    name VARCHAR(255),
+    name VARCHAR(255) UNIQUE,
     price FLOAT
 );
 
