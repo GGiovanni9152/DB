@@ -10,7 +10,6 @@ def get_user_games(user_id: int) -> DataFrame:
         LEFT JOIN games
         ON user_games.game_id = games.game_id
         WHERE user_games.user_id = %(user_id)s
-        ORDER BY name
     """
     with psycopg2.connect(**DB_CONFIG) as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:

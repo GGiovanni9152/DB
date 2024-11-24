@@ -15,6 +15,11 @@ VALUES
         'Romania666',
         'roman@gmail.com',
         75.0
+    ),
+    (
+        'Maksimka',
+        'Maksimka@yandex.com',
+        90
     );
 
 INSERT INTO
@@ -126,4 +131,16 @@ VALUES
         3,
         1,
         'accepted'
+    );
+
+INSERT INTO 
+    game_detail(game_id, developer_id, rating, release_date, version, description)
+VALUES
+    (
+        1,
+        1,
+        3.5,
+        '2013-06-03',
+        '7.37d',
+        'Every day, millions of players worldwide enter battle as one of over a hundred Dota heroes. And no matter if its their 10th hour of play or 1,000th, theres always something new to discover. With regular updates that ensure a constant evolution of gameplay, features, and heroes, Dota 2 has taken on a life of its own.'
     );

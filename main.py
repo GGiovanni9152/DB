@@ -6,7 +6,7 @@ def main():
     st.sidebar.title("Навигация")
     page = st.sidebar.radio(
         "Перейти к странице",
-        ["Магазин", "Библиотека"],
+        ["Магазин", "Библиотека", "Игры"],
     )
 
     if page == "Магазин":
@@ -14,6 +14,8 @@ def main():
 
     elif page == "Библиотека":
         show_library_page()
+    elif page == "Игры":
+        show_games_page()
 
 if __name__ == "__main__":
     main()
