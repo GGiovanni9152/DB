@@ -5,7 +5,7 @@ from settings import DB_CONFIG
 
 def get_game_detail(game_id: int) -> DataFrame:
     query = """
-        SELECT name, rating, release_date, version, description
+        SELECT name, rating, release_date, version, description, picture_name, picture_code
         FROM game_detail
         LEFT JOIN developers
         ON game_detail.developer_id = developers.developer_id

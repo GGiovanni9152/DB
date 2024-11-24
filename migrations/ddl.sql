@@ -54,7 +54,9 @@ CREATE TABLE game_detail(
     rating FLOAT,
     release_date DATE,
     version VARCHAR(20),
-    description VARCHAR(600)
+    description TEXT,
+    picture_name TEXT,
+    picture_code TEXT
 );
 
 COMMENT ON TABLE game_detail IS 'Таблица детального описания игр';

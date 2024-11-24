@@ -39,6 +39,11 @@ VALUES
         'CyberiaNova',
         'CyberiaNova.ru',
         'Russia'
+    ),
+    (
+        'Paradox Interactive',
+        'Paradox.com',
+        'Sweden'
     );
 
 INSERT INTO
@@ -53,8 +58,8 @@ VALUES
         80
     ),
     (
-        'SaintsRow4',
-        40
+        'Hearts of Iron IV',
+        100
     );
 
 INSERT INTO
@@ -85,9 +90,14 @@ VALUES
         'Start playing dota2'
     ),
     (
-        3,
+        2,
         'Real PATRIOT',
         'Complete Smyta'
+    ),
+    (
+        3,
+        'No more girls',
+        'Start playing Hearts of Iron IV'
     );
 
 INSERT INTO
@@ -134,7 +144,7 @@ VALUES
     );
 
 INSERT INTO 
-    game_detail(game_id, developer_id, rating, release_date, version, description)
+    game_detail(game_id, developer_id, rating, release_date, version, description, picture_name)
 VALUES
     (
         1,
@@ -142,5 +152,24 @@ VALUES
         3.5,
         '2013-06-03',
         '7.37d',
-        'Every day, millions of players worldwide enter battle as one of over a hundred Dota heroes. And no matter if its their 10th hour of play or 1,000th, theres always something new to discover. With regular updates that ensure a constant evolution of gameplay, features, and heroes, Dota 2 has taken on a life of its own.'
+        'Every day, millions of players worldwide enter battle as one of over a hundred Dota heroes. And no matter if its their 10th hour of play or 1,000th, theres always something new to discover. With regular updates that ensure a constant evolution of gameplay, features, and heroes, Dota 2 has taken on a life of its own.',
+        'Dota.jpg'
+    ),
+    (
+        2,
+        3,
+        2,
+        '2024-05-16',
+        '1.3',
+        'The plot unfolds in 1612, during the Time of Troubles. In the Russian kingdom - famine, wars, Polish intervention, impostors trying to take the throne. The main character of the game is a young boyar Yuri Miloslavsky. In order to save his beloved, he swore allegiance to the Polish queen Vladislav IV, but still in time became a participant of the popular uprising against the invaders.',
+        'Smyta.jpg'
+    ),
+    (
+        3,
+        4,
+        8,
+        '2016-03-11',
+        '1.72',
+        'Victory is at your fingertips! Your ability to lead your nation is your supreme weapon, the strategy game Hearts of Iron IV lets you take command of any nation in World War II; the most engaging conflict in world history.',
+        'Heartsofiron.jpg'
     );
