@@ -9,6 +9,9 @@ import base64
 if 'close' not in st.session_state:
     st.session_state.close = False
 
+if 'current_game_id' not in st.session_state:
+    st.session_state.current_game_id = -1
+
 def close_callback():
     st.session_state.close = True
 
@@ -86,10 +89,10 @@ def show_search_games_page():
                     div_style={"display": "flex", "justify-content": "center", "flex-wrap": "wrap"},
                     img_style={"margin": "5px", "height": "200px"},)
 
-                if clicked != -1:
-                    while (st.session_state.close != True):
-                        show_game_page(detail)
-                    st.session_state.close = False
+                #if clicked != -1:
+                #    while (st.session_state.close != True):
+                #        show_game_page(detail)
+                #    st.session_state.close = False
 
         
 

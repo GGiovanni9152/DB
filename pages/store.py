@@ -13,6 +13,8 @@ if "games_table" not in st.session_state:
     st.session_state.games_table = pd.DataFrame(
         columns = ["Имя пользователя", "User_id", "Название игры", "Game_id"]
     )
+    st.session_state.games_table['Game_id'] = st.session_state.games_table['Game_id'].astype('int64')
+    st.session_state.games_table['User_id'] = st.session_state.games_table['User_id'].astype('int64')
 
 @st.cache_data
 def get_games() -> dict[str, int]:
@@ -42,9 +44,17 @@ def add_game_event(user_name, user_id, game_name, game_id):
         }
     )
 
-    st.session_state.games_table = pd.concat(
-        [st.session_state.games_table, new_row], ignore_index=True
-    )
+    is_duplicate = (
+        (st.session_state.games_table == new_row.values).all(axis=1)
+    ).any()
+
+    # Добавляем строку только если её нет в таблице
+    if not is_duplicate:
+        st.session_state.games_table = pd.concat(
+            [st.session_state.games_table, new_row], ignore_index=True
+        )
+    st.session_state.games_table.drop_duplicates(inplace = True, ignore_index = True)
+
 
 def clear_table_event():
     st.session_state.games_table = pd.DataFrame(
@@ -53,7 +63,7 @@ def clear_table_event():
 
 def upload_games(games_table: pd.DataFrame) -> None:
     BuyService().process_buy(games_table)
-    st.write("Игра добавлена на ваш аккаунт!")
+    st.write("Игра добавлена на выбранный аккаунт!")
 
 games = get_games()
 users = get_users()
@@ -72,28 +82,35 @@ def show_store_page():
 
     if (add_game_btn):
         add_game_event(selected_user, users[selected_user], selected_game, games[selected_game])
+        print(st.session_state.games_table.info())
 
     if (clear_table_btn):
         clear_table_event()
     
     if (apply_btn and len(st.session_state.games_table) > 0):
-        user_games = repositories.library.get_user_games(users[selected_user])
+        for user_id in st.session_state.games_table['User_id']:
+        
+            user_games = repositories.library.get_user_games(user_id) #users[selected_user]
 
-        already_has = False
-        has_game = None
+            #Bag checks only one user
 
-        for game_id in st.session_state.games_table["Game_id"]:
-            if game_id in user_games["game_id"]:
-                already_has = True
-                has_game = games_names[game_id]
-                break
+            already_has = False
+            has_game = None
+            name = st.session_state.games_table[st.session_state.games_table['User_id'] == user_id]['Имя пользователя'].iloc[0]
+            print(name)
+
+            for game_id in map(int, st.session_state.games_table["Game_id"]):
+                if int(game_id) in map(int, user_games["game_id"]):
+                    already_has = True
+                    has_game = games_names[game_id]
+                    break
 
         if not(already_has):
             upload_games(st.session_state.games_table)
             st.success("Игра успешно добавлена!", icon="🔥")
             clear_table_event()
         else:
-            st.warning(f"У пользователя уже имеется игра: {has_game}", icon="⚠️")
+            st.warning(f"У пользователя {name} уже имеется игра: {has_game}", icon="⚠️")
     
     st.write("Выбранные игры:")
     st.dataframe(st.session_state.games_table)
