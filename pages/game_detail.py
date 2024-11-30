@@ -22,7 +22,7 @@ def get_games() -> pd.DataFrame:
 
     return games
 
-#@st.cache_data
+@st.cache_data
 def get_game_detail(game_id):
     detail = repositories.game_detail.get_game_detail(game_id)
 
@@ -43,6 +43,8 @@ def encode_image_to_base64(image_path):
 
 def show_search_games_page():
     #print(get_games())
+
+    games = get_games()
 
     text_search = st.text_input("Введите название или id игры", value = "")
 

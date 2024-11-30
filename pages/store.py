@@ -2,7 +2,6 @@ from datetime import date
 import pandas as pd
 
 import streamlit as st
-from services.addgame import StoreService
 from services.buy import BuyService
 import repositories.games
 import repositories.users
@@ -16,7 +15,7 @@ if "games_table" not in st.session_state:
     st.session_state.games_table['Game_id'] = st.session_state.games_table['Game_id'].astype('int64')
     st.session_state.games_table['User_id'] = st.session_state.games_table['User_id'].astype('int64')
 
-@st.cache_data
+#@st.cache_data
 def get_games() -> dict[str, int]:
     print('Получение списка игр')
     games = repositories.games.get_games()
@@ -73,6 +72,8 @@ games_names = get_games_names()
 def show_store_page():
     st.title("Магазин")
     
+    games = get_games()
+
     selected_game = st.selectbox("Выберите игру", games.keys())
     selected_user = st.selectbox("Выберете пользователя", users.keys())
 

@@ -2,6 +2,7 @@ import streamlit as st
 from pages.store import show_store_page
 from pages.library import show_library_page
 from pages.game_detail import show_search_games_page
+from pages.addgame import show_add_game_page
 import repositories.users
 from services.auth import Authotize
 import services.user
@@ -75,18 +76,36 @@ def main():
             register()
         #login()
     else:
-        page = st.sidebar.radio(
-            "Перейти к странице",
-            ["Магазин", "Библиотека", "Игры"],
-        )
 
-        if page == "Магазин":
-            show_store_page()
+        if st.session_state["admin"]:
+            page = st.sidebar.radio(
+                "Перейти к странице",
+                ["Магазин", "Библиотека", "Игры", "Добавить игру"],
+            )
 
-        elif page == "Библиотека":
-            show_library_page()
-        elif page == "Игры":
-            show_search_games_page()
+            if page == "Магазин":
+                show_store_page()
+
+            elif page == "Библиотека":
+                show_library_page()
+            elif page == "Игры":
+                show_search_games_page()
+            elif page == "Добавить игру":
+                show_add_game_page()
+
+        else:
+            page = st.sidebar.radio(
+                "Перейти к странице",
+                ["Магазин", "Библиотека", "Игры"],
+            )
+
+            if page == "Магазин":
+                show_store_page()
+
+            elif page == "Библиотека":
+                show_library_page()
+            elif page == "Игры":
+                show_search_games_page()
     
 
 if "authenticated" not in st.session_state:

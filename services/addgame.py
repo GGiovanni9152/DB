@@ -1,14 +1,24 @@
 from datetime import datetime
-from repositories.games import add_game, add_game_detail
 from pandas import DataFrame
 import time
+import repositories.addgame
+import base64
 
-class StoreService:
-    def process_add_game(self, name: str, items: DataFrame) -> int:
-        game_id = add_game(name)
+def encode_image_to_base64(image):
+    encoded = base64.b64encode(image.read()).decode()
+    return f"data:image/jpeg;base64,{encoded}"
 
-        items["game_id"] = game_id
-        add_game_detail(items)
+class GameAdder():
+    def add_game(self, game : DataFrame):
 
-        return game_id
+        game_id = repositories.addgame.add_game(game[["name", "price"]])
+
+        #pathname = "picture/" + game["picture_name"]
+
+        game["game_id"] = game_id
+
+        repositories.addgame.add_game_detail(game[["game_id", "developer_id", "release_date", "version", "description", "picture_name", "picture_code"]])
+
+
+
         
