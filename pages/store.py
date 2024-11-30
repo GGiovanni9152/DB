@@ -82,7 +82,7 @@ def show_store_page():
 
     if (add_game_btn):
         add_game_event(selected_user, users[selected_user], selected_game, games[selected_game])
-        print(st.session_state.games_table.info())
+        #print(st.session_state.games_table.info())
 
     if (clear_table_btn):
         clear_table_event()
@@ -97,7 +97,7 @@ def show_store_page():
             already_has = False
             has_game = None
             name = st.session_state.games_table[st.session_state.games_table['User_id'] == user_id]['Имя пользователя'].iloc[0]
-            print(name)
+            #print(name)
 
             for game_id in map(int, st.session_state.games_table["Game_id"]):
                 if int(game_id) in map(int, user_games["game_id"]):
@@ -114,3 +114,5 @@ def show_store_page():
     
     st.write("Выбранные игры:")
     st.dataframe(st.session_state.games_table)
+
+#show_store_page()

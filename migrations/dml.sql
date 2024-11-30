@@ -1,23 +1,27 @@
 INSERT INTO 
-    users (nickname, email, money)
+    users (nickname, password, email, money)
 VALUES
     (
         'GGiovanni',
+        '123',
         'ggiovanni@gmail.com',
         100.0
     ),
     (
         'Motya',
+        '123',
         'begemotya@gmail.com',
         80.0
     ),
     (
         'Romania666',
+        '123',
         'roman@gmail.com',
         75.0
     ),
     (
         'Maksimka',
+        '123',
         'Maksimka@yandex.com',
         90
     );

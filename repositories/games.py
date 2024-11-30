@@ -3,6 +3,14 @@ import psycopg2.extras
 from settings import DB_CONFIG
 from pandas import DataFrame
 
+def get_game_name(game_id : int) -> str:
+    query = "SELECT name FROM games WHERE game_id = %(game_id)s"
+
+    with psycopg2.connect(**DB_CONFIG) as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, {"game_id": game_id})
+            return cur.fetchone()[0]
+
 def get_games() -> list[dict]:
     print("Receiving games")
     query = "SELECT game_id, name, price FROM games;"

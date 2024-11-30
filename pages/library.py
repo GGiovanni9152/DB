@@ -26,3 +26,5 @@ def show_library_page():
             st.warning("У выбранного пользователя нет приложений")
         else:
             st.dataframe(items)
+
+#show_library_page()

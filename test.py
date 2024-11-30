@@ -6,6 +6,7 @@ import repositories.users
 import repositories.library
 from st_clickable_images import clickable_images
 import base64
+from services.auth import Authotize
 
 def get_games() -> pd.DataFrame:
     print('Получение списка игр')
@@ -30,7 +31,7 @@ def get_users() -> dict[str, int]:
     return {user["nickname"]: user["user_id"] for user in users}
 
 
-users = get_users()
+'''users = get_users()
 
 user_games = repositories.library.get_user_games(users['GGiovanni'])
 
@@ -40,8 +41,10 @@ print(users['GGiovanni'])
 print(user_games)
 
 print(user_games.info())
+'''
+auth = Authotize()
 
-
+print(auth.auth('ggiovanni@gmail.com', '123'))
 
 #detail = get_game_detail(game_id.item())
 #print(detail)

@@ -2,6 +2,7 @@ CREATE TYPE friendship_status AS ENUM ('requested', 'accepted');
 
 CREATE TABLE users(
     user_id SERIAL PRIMARY KEY,
+    password TEXT,
     nickname VARCHAR(255) UNIQUE,
     email VARCHAR(255),
     money FLOAT

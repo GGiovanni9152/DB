@@ -9,20 +9,20 @@ import base64
 if 'close' not in st.session_state:
     st.session_state.close = False
 
-if 'current_game_id' not in st.session_state:
-    st.session_state.current_game_id = -1
+if "current_game" not in st.session_state:
+    st.session_state.games_table = pd.DataFrame()
 
 def close_callback():
     st.session_state.close = True
 
-@st.cache_data
+#@st.cache_data
 def get_games() -> pd.DataFrame:
     print('Получение списка игр')
     games = pd.DataFrame(repositories.games.get_games())
 
     return games
 
-@st.cache_data
+#@st.cache_data
 def get_game_detail(game_id):
     detail = repositories.game_detail.get_game_detail(game_id)
 
@@ -41,20 +41,6 @@ def encode_image_to_base64(image_path):
         encoded = base64.b64encode(image.read()).decode()
         return f"data:image/jpeg;base64,{encoded}"
 
-#@st.dialog(title= "Game", width = "large")
-def show_game_page(detail):
-    close = st.button(":red[Закрыть]")
-    st.image(detail['picture_code'].item())
-    
-modal = Modal(
-    "Game", 
-    key="demo-modal",
-    
-    # Optional
-    padding=20,    # default value
-    max_width=744  # default value
-) 
-
 def show_search_games_page():
     #print(get_games())
 
@@ -65,6 +51,9 @@ def show_search_games_page():
     N_cards_per_row = 1
 
     if text_search:
+
+        details = []
+
         for n_row, row in df_search.reset_index().iterrows():
             i = n_row % N_cards_per_row
             
@@ -82,6 +71,8 @@ def show_search_games_page():
                 #print(games['game_id'].loc(games["name"] == game_name))
                 detail = get_game_detail(game_id.item())
 
+                details.append(detail)
+
                 image = [detail['picture_code'].item()]
 
                 clicked = clickable_images(
@@ -89,12 +80,16 @@ def show_search_games_page():
                     div_style={"display": "flex", "justify-content": "center", "flex-wrap": "wrap"},
                     img_style={"margin": "5px", "height": "200px"},)
 
+                if clicked != -1:
+                    st.session_state.current_game = details[clicked]
+                    st.switch_page(page = "pages/current_game.py")
+
                 #if clicked != -1:
                 #    while (st.session_state.close != True):
                 #        show_game_page(detail)
                 #    st.session_state.close = False
 
-        
+#show_search_games_page()        
 
 
 

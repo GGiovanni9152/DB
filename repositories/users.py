@@ -10,3 +10,11 @@ def get_users() -> list[dict]:
         with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
             cur.execute(query)
             return cur.fetchall()
+
+def get_users_with_password() -> list[dict]:
+    print("Receiving users")
+    query = "SELECT password, email FROM users;"
+    with psycopg2.connect(**DB_CONFIG) as conn:
+        with conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(query)
+            return cur.fetchall()
