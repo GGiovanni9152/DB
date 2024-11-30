@@ -18,6 +18,11 @@ COMMENT ON COLUMN users.email IS 'Email пользователя';
 
 COMMENT ON COLUMN users.money IS 'Количество денег на счету пользователя';
 
+CREATE TABLE admins(
+    admin_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE
+);
+
 CREATE TABLE developers(
     developer_id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE,

@@ -6,11 +6,13 @@ import repositories.users
 from services.auth import Authotize
 import services.user
 import services.users
+import services.regist
 import repositories.admin
 import pandas as pd
 
 auth = Authotize()
 users = services.users.get_users()
+registr = services.regist.Registration()
 
 def login():
     st.title("Авторизация")
@@ -55,10 +57,12 @@ def register():
                 else:
                     st.success("Успешная регистрация")
                     st.session_state["authenticated"] = True
-                    #st.session_state.user = pd.DataFrame({})
+                    #user = pd.DataFrame({"nickname" : nickname, "email" : email, "password" : password})
+                    user_id = registr.registr(pd.DataFrame({"nickname": [nickname], "email": [email], "password": [password]}))
+                    #user["user_id"] = user_id
+                    user = pd.DataFrame({"user_id": [user_id], "nickname": [nickname], "email": [email], "password": [password]})
+                    st.session_state.user = user
                     st.rerun()
-
-
 
 
 def main():

@@ -27,6 +27,13 @@ VALUES
     );
 
 INSERT INTO
+    admins(user_id)
+VALUES
+    (
+        1
+    );
+
+INSERT INTO
     developers (name, website, country)
 VALUES
     (
