@@ -7,6 +7,9 @@ import repositories.library
 from st_clickable_images import clickable_images
 import base64
 from services.auth import Authotize
+import repositories.admin
+import services.users
+
 
 def get_games() -> pd.DataFrame:
     print('Получение списка игр')
@@ -42,9 +45,34 @@ print(user_games)
 
 print(user_games.info())
 '''
-auth = Authotize()
+#auth = Authotize()
 
-print(auth.auth('ggiovanni@gmail.com', '123'))
+#print(auth.auth('ggiovanni@gmail.com', '123'))
 
+#print(repositories.admin.get_admins(1))
+
+#print(repositories.users.get_user_by_email("ggiovanni@gmail.com"))
+
+import psycopg2
+import psycopg2.extras
+from settings import DB_CONFIG
+from pandas import DataFrame
+import repositories.users
+
+def get_user(email) -> DataFrame:
+
+    user = repositories.users.get_user_by_email(email)
+
+    result = DataFrame()
+
+    for dic in user:
+        for key in dic.keys():
+            #result.insert(0, column=key, value=dic[key])
+            result[key] = [dic[key]]
+            print(key, dic[key])
+
+    return result
+
+print(get_user("ggiovanni@gmail.com"))
 #detail = get_game_detail(game_id.item())
 #print(detail)

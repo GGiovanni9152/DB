@@ -73,6 +73,8 @@ def show_search_games_page():
 
                 details.append(detail)
 
+                print(details)
+
                 image = [detail['picture_code'].item()]
 
                 clicked = clickable_images(
@@ -81,7 +83,8 @@ def show_search_games_page():
                     img_style={"margin": "5px", "height": "200px"},)
 
                 if clicked != -1:
-                    st.session_state.current_game = details[clicked]
+                    print(clicked)
+                    st.session_state.current_game = details[n_row]
                     st.switch_page(page = "pages/current_game.py")
 
                 #if clicked != -1:

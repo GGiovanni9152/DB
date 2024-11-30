@@ -1,4 +1,5 @@
 import repositories.users
+import bcrypt
 
 users = repositories.users.get_users_with_password()
 
@@ -12,16 +13,18 @@ class Authotize():
         users = repositories.users.get_users_with_password()
         return {user["email"]: user["password"] for user in users}
 
-    def auth(self, email, password):
+    def auth(self, email, password:str):
         #print(self.users)
         passw = None
 
         if email in self.users:
             passw = self.users[email]
+        else:
+            return False
         
         if (passw == None):
             return False
-        if (passw == password):
+        if (bcrypt.checkpw(password.encode("utf-8"), passw.encode("utf-8"))):
             return True
 
 
