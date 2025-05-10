@@ -13,5 +13,5 @@ def get_user_games(user_id: int) -> DataFrame:
     """
     with psycopg2.connect(**DB_CONFIG) as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-            cur.execute(query, {"user_id": user_id})
+            cur.execute(query, {"user_id": int(user_id)})
             return DataFrame(cur.fetchall())

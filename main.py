@@ -10,6 +10,11 @@ import services.users
 import services.regist
 import repositories.admin
 import pandas as pd
+import redis_client
+import atexit
+import jwt_utils
+import adm_listener
+
 
 auth = Authotize()
 users = services.users.get_users()
@@ -26,10 +31,15 @@ def login():
             st.session_state["authenticated"] = True
             st.session_state["username"] = email
             st.success(f"Добро пожаловать, {email}!")
-            st.session_state.user = services.user.get_user(email)
+            user = services.user.get_user(email)
+            st.session_state.user = user
+            redis_client.save_current_user(user)
             st.session_state["admin"] = repositories.admin.get_admins(st.session_state.user["user_id"].item())
             print(st.session_state["admin"])
             st.rerun()
+            token = jwt_utils.create_token(user["user_id"].item(), email, st.session_state["admin"])
+            st.session_state["jwt"] = token
+            redis_client.redis_client.save_token(user["user_id"].item(), token)
         else:
             st.error("Неверная почта или пароль!")
 
@@ -60,9 +70,14 @@ def register():
                     st.session_state["authenticated"] = True
                     #user = pd.DataFrame({"nickname" : nickname, "email" : email, "password" : password})
                     user_id = registr.registr(pd.DataFrame({"nickname": [nickname], "email": [email], "password": [password]}))
+                    redis_client.clear_users()
                     #user["user_id"] = user_id
                     user = pd.DataFrame({"user_id": [user_id], "nickname": [nickname], "email": [email], "password": [password]})
                     st.session_state.user = user
+                    redis_client.save_current_user(user)
+                    token = jwt_utils.create_token(user_id, email, False)
+                    st.session_state["jwt"] = token
+                    redis_client.redis_client.save_token(user_id, token)
                     st.rerun()
 
 
@@ -76,8 +91,40 @@ def main():
             register()
         #login()
     else:
+        if "jwt" in st.session_state:
+            payload = jwt_utils.decode_token(st.session_state["jwt"])
+            if payload:
+                token_from_redis = redis_client.load_token(payload["user_id"])
+                if token_from_redis == st.session_state["jwt"]:
+                    st.session_state["authenticated"] = True
+                    st.session_state["admin"] = payload.get("admin", False)
+                    st.session_state["user"] = services.user.get_user(payload["email"])
+                else:
+                    st.warning("token_comparison_failed")
+                    st.session_state["authenticated"] = False
+                    st.session_state["admin"] = False
+                    st.session_state["user"] = pd.DataFrame()
+                    redis_client.clear_current_user()
+                    st.rerun()
+            else:
+                st.session_state["authenticated"] = False
+                st.session_state["admin"] = False
+                st.session_state["user"] = pd.DataFrame()
+                redis_client.clear_current_user()
+                st.rerun()
 
         if st.session_state["admin"]:
+            if st.sidebar.button("Выйти"):
+                st.session_state["authenticated"] = False
+                st.session_state["admin"] = False
+                st.session_state["user"] = pd.DataFrame()
+                redis_client.clear_current_user()
+                st.rerun()
+
+            if "listener_started" not in st.session_state:
+                adm_listener.start_list()
+                st.session_state["listener_started"] = True
+
             page = st.sidebar.radio(
                 "Перейти к странице",
                 ["Магазин", "Библиотека", "Игры", "Добавить игру"],
@@ -94,6 +141,12 @@ def main():
                 show_add_game_page()
 
         else:
+            if st.sidebar.button("Выйти"):
+                st.session_state["authenticated"] = False
+                st.session_state["admin"] = False
+                st.session_state["user"] = pd.DataFrame()
+                redis_client.clear_current_user()
+                st.rerun()
             page = st.sidebar.radio(
                 "Перейти к странице",
                 ["Магазин", "Библиотека", "Игры"],
@@ -114,10 +167,24 @@ if "authenticated" not in st.session_state:
 if "admin" not in st.session_state:
     st.session_state["admin"] = False
 
-if "user" not in st.session_state:
+user = redis_client.load_current_user()
+if user is None or user.empty:
     st.session_state.user = pd.DataFrame(
         columns = ["user_id", "nickname", "email", "money"]
     )
+else:
+    st.session_state.user = user
+
+#if "user" not in st.session_state:
+#    st.session_state.user = pd.DataFrame(
+#        columns = ["user_id", "nickname", "email", "money"]
+#    )
 
 if __name__ == "__main__":
     main()
+
+def exit_handler():
+    redis_client.clear_current_user()
+    redis_client.clear_users()
+
+atexit.register(exit_handler)

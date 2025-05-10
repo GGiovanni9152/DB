@@ -2,7 +2,7 @@ from pandas import DataFrame
 import psycopg2
 from settings import DB_CONFIG
 import bcrypt
-
+from redis_client import redis_client
 
 def add_game(game : DataFrame) -> int:
     query = """
@@ -14,6 +14,8 @@ def add_game(game : DataFrame) -> int:
     with psycopg2.connect(**DB_CONFIG) as conn:
         with conn.cursor() as cur:
             cur.execute(query, params)
+            redis_client.delete("games:list")
+            redis_client.delete("users_pass:list")
             return cur.fetchone()[0]
 
 def add_game_detail(detail: DataFrame) -> None:
